@@ -1,0 +1,161 @@
+<div
+  style="
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+  "
+>
+  <!-- <div style="display: flex; align-items: flex-start; margin-top: 20px"> -->
+  <!-- Button on the far left to toggle the 4-input form -->
+  <div
+    style="
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    "
+  >
+    <button
+      (click)="toggleSecondForm()"
+      class="toggle-button"
+      style="margin-right: auto"
+    >
+      {{ isSecondFormVisible ? "Close" : "AddProduct" }}
+    </button>
+
+    <!-- Button for the original AddUser form -->
+    <button (click)="toggleForm()" class="toggle-button">
+      {{ isFormVisible ? "Close" : "AddUser" }}
+    </button>
+  </div>
+  <!-- </div> -->
+
+  <!-- Add User Form -->
+  <div *ngIf="isFormVisible" class="mini-form">
+    <form (ngSubmit)="submitAddUserForm()">
+      <div style="margin-bottom: 10px">
+        <label for="name">Name:</label>
+        <input
+          [(ngModel)]="adduser.name"
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Enter your name"
+        />
+      </div>
+      <div style="margin-bottom: 10px">
+        <label for="email">Email:</label>
+        <input
+          [(ngModel)]="adduser.email"
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Enter your email"
+        />
+      </div>
+      <div style="margin-bottom: 10px">
+        <label for="password">Password:</label>
+        <input
+          [(ngModel)]="adduser.password"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+        />
+      </div>
+      <button type="submit" class="submit-button">Submit</button>
+    </form>
+  </div>
+
+  <!-- Add Product Form -->
+  <div *ngIf="isSecondFormVisible" class="mini-form">
+    <form (ngSubmit)="submitAddProductForm()">
+      <div style="margin-bottom: 10px">
+        <label for="Pimg">Image:</label>
+        <input
+          [(ngModel)]="addproduct.Pimg"
+          type="file"
+          id="Pimg"
+          name="Pimg"
+          placeholder="Upload image"
+        />
+      </div>
+      <div style="margin-bottom: 10px">
+        <label for="description">Description:</label>
+        <input
+          [(ngModel)]="addproduct.description"
+          type="text"
+          id="description"
+          name="description"
+          placeholder="Enter description"
+        />
+      </div>
+      <div style="margin-bottom: 10px">
+        <label for="price">Price:</label>
+        <input
+          [(ngModel)]="addproduct.price"
+          type="number"
+          id="price"
+          name="price"
+          placeholder="Enter price"
+        />
+      </div>
+      <div style="margin-bottom: 10px">
+        <label for="date">Date:</label>
+        <input
+          [(ngModel)]="addproduct.date"
+          type="date"
+          id="date"
+          name="date"
+          placeholder="Enter the date"
+        />
+      </div>
+      <button type="submit" class="submit-button">Submit</button>
+    </form>
+  </div>
+  <h3>Products</h3>
+  <table border="1" style="width: 100%; text-align: left">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products; let i = index">
+        <td>{{ product.Pimg }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.date }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Users</h3>
+  <table border="1" style="width: 100%; text-align: left">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users; let i = index">
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.password }}</td>
+        <td>
+          <button>Modify</button>
+          <button>Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
