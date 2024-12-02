@@ -4,13 +4,26 @@ import { HomeComponent } from './home/home.component';
 import { ManagmentComponent } from './managment/managment.component';
 import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './guards/auth.guard';
 
-// Define routes here
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'managment', component: ManagmentComponent },
-  { path: 'about', component: AboutComponent },
+  { 
+    path: 'home', 
+    component: HomeComponent,
+    canActivate: [AuthGuard]
+  },
+  { 
+    path: 'managment', 
+    component: ManagmentComponent,
+    canActivate: [AuthGuard]
+  },
+  { 
+    path: 'about', 
+    component: AboutComponent,
+    canActivate: [AuthGuard]
+  },
   { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
 
 @NgModule({

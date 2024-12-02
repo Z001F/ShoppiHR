@@ -1,9 +1,25 @@
-$primary-color: rgb(42, 133, 42); // Define a primary color variable
-$hover-color: rgb(30, 100, 30); // Define a hover color variable
-$form-bg-color: #f9f9f9; // Background color for the forms
-$form-border-color: #ccc; // Border color for the forms
+$primary-color: rgb(42, 133, 42);
+$hover-color: rgb(30, 100, 30);
+$form-bg-color: #f9f9f9;
+$form-border-color: #ccc;
 
-// Common button styling
+.management-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  margin: auto;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
 .toggle-button {
   padding: 10px 20px;
   background-color: $primary-color;
@@ -17,64 +33,79 @@ $form-border-color: #ccc; // Border color for the forms
   }
 }
 
-// Form container styling
 .mini-form {
   padding: 20px;
   border: 1px solid $form-border-color;
   border-radius: 5px;
   background-color: $form-bg-color;
-  width: 300px; // Define a fixed width for the form
-  display: block; // Ensures it takes block-level space
-  margin: 0 auto; // Horizontally center the form
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); // Add a subtle shadow for better visibility
+  width: 300px;
+  display: block;
+  margin: 20px auto;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 
-  form {
-    div {
-      margin-bottom: 10px;
+  .form-group {
+    margin-bottom: 10px;
 
-      label {
-        display: block;
-        margin-bottom: 5px;
-      }
-
-      input {
-        width: 100%;
-        padding: 5px;
-        border: 1px solid $form-border-color;
-        border-radius: 3px;
-      }
+    label {
+      display: block;
+      margin-bottom: 5px;
     }
 
-    .submit-button {
-      padding: 5px 15px;
-      background-color: $primary-color;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+    input {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid $form-border-color;
+      border-radius: 3px;
+    }
+  }
 
-      &:hover {
-        background-color: $hover-color;
-      }
+  .submit-button {
+    padding: 5px 15px;
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $hover-color;
     }
   }
 }
-table {
+
+.data-table {
   border-collapse: collapse;
   width: 100%;
+  margin: 10px 0;
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f4f4f4;
+  }
+
+  .action-button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    border: 1px solid $primary-color;
+    border-radius: 3px;
+    background-color: white;
+    color: $primary-color;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $primary-color;
+      color: white;
+    }
+  }
 }
 
-th,
-td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-th {
-  background-color: #f4f4f4;
-  text-align: left;
-}
-
-button {
-  margin-right: 5px;
+h3 {
+  margin: 20px 0;
+  color: $primary-color;
+  align-self: flex-start;
 }

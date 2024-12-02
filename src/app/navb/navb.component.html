@@ -12,9 +12,11 @@
         <li class="mx-3">
           <a class="nav-link" routerLink="/about">About</a>
         </li>
-        <!-- Login Button -->
-        <li class="mx-3">
-          <a href="/login" class="btn btn-primary">Login</a>
+        <li class="mx-3" *ngIf="!(authService.isLoggedIn$ | async)">
+          <a routerLink="/login" class="btn btn-primary">Login</a>
+        </li>
+        <li class="mx-3" *ngIf="authService.isLoggedIn$ | async">
+          <button (click)="onLogout()" class="btn btn-outline-primary">Logout</button>
         </li>
       </ul>
     </div>

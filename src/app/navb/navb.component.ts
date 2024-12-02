@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Route, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-navb',
@@ -7,5 +7,9 @@ import { Route, Router } from '@angular/router';
   styleUrls: ['./navb.component.scss'],
 })
 export class NavbComponent {
-  constructor(private route: Router) {}
+  constructor(public authService: AuthService) {}
+
+  onLogout() {
+    this.authService.logout();
+  }
 }

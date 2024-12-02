@@ -3,7 +3,14 @@
     <div class="card shadow-lg">
       <div class="card-body">
         <h2 class="text-center mb-4">Login</h2>
-        <form action="#" method="POST">
+        <div class="alert alert-info mb-3">
+          <small>
+            <strong>Development Credentials:</strong><br>
+            Username: admin<br>
+            Password: admin
+          </small>
+        </div>
+        <form (ngSubmit)="onSubmit()">
           <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input
@@ -11,6 +18,7 @@
               class="form-control"
               id="username"
               name="username"
+              [(ngModel)]="loginData.username"
               placeholder="Enter your username"
               required
             />
@@ -22,9 +30,13 @@
               class="form-control"
               id="password"
               name="password"
+              [(ngModel)]="loginData.password"
               placeholder="Enter your password"
               required
             />
+          </div>
+          <div *ngIf="loginError" class="alert alert-danger">
+            Invalid username or password
           </div>
           <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
