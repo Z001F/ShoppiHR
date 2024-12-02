@@ -144,7 +144,7 @@ export class ManagmentComponent implements OnInit {
         email: '',
         password: '',
         role: 'user',
-        registryDate: '',
+        registryDate: new Date().toLocaleString(),
         deleted: false
       };
     }
@@ -169,7 +169,7 @@ export class ManagmentComponent implements OnInit {
         Pimg: '',
         description: '',
         price: 0,
-        date: '',
+        date: new Date().toISOString().split('T')[0],
         userId: 0,
         category: '',
         brand: ''
@@ -323,5 +323,15 @@ export class ManagmentComponent implements OnInit {
       this.isAddingBrand = false;
       this.newBrand = '';
     }
+  }
+
+  // Helper method to check if any product has a category
+  hasAnyCategory(): boolean {
+    return this.products.some(product => product.category);
+  }
+
+  // Helper method to check if any product has a brand
+  hasAnyBrand(): boolean {
+    return this.products.some(product => product.brand);
   }
 }

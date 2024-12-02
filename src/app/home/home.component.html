@@ -106,9 +106,9 @@
         </div>
         <div class="product-info">
           <h2>{{ selectedProduct.description }}</h2>
-          <div class="brand-category">
-            <span class="brand">{{ selectedProduct.brand }}</span>
-            <span class="category">{{ selectedProduct.category }}</span>
+          <div class="brand-category" *ngIf="selectedProduct.brand || selectedProduct.category">
+            <span class="brand" *ngIf="selectedProduct.brand">{{ selectedProduct.brand }}</span>
+            <span class="category" *ngIf="selectedProduct.category">{{ selectedProduct.category }}</span>
           </div>
           <div class="price-tag">${{ selectedProduct.price }}</div>
           <div class="date-info">Added on: {{ selectedProduct.date }}</div>

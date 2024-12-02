@@ -1,0 +1,459 @@
+@import '../managment/managment.component.scss';
+
+// Variables
+$section-spacing: 100px;
+$card-radius: 15px;
+$transition-speed: 0.3s;
+$text-primary: #2c3e50;
+$text-secondary: #666;
+$gradient-primary: linear-gradient(135deg, $primary-color 0%, #27ae60 100%);
+
+// Mixins
+@mixin card-hover {
+  transition: transform $transition-speed ease, box-shadow $transition-speed ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@mixin section-padding {
+  padding: 80px 0;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 90%;
+}
+
+// Base styles
+.about-container {
+  color: $text-primary;
+  overflow-x: hidden;
+}
+
+// Hero Section
+.hero-section {
+  background: $gradient-primary;
+  color: white;
+  text-align: center;
+  padding: 120px 20px;
+  margin-bottom: $section-spacing;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: white;
+    transform: skewY(-3deg);
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+    opacity: 0.9;
+  }
+}
+
+// Stats Section
+.stats-section {
+  @include section-padding;
+  margin-bottom: $section-spacing;
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .stat-card {
+    background: white;
+    padding: 30px;
+    border-radius: $card-radius;
+    text-align: center;
+    @include card-hover;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+    .stat-number {
+      font-size: 2.5rem;
+      color: $primary-color;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      color: $text-secondary;
+      font-size: 1.1rem;
+    }
+  }
+}
+
+// Mission Section
+.mission-section {
+  @include section-padding;
+  background-color: #f8f9fa;
+  margin-bottom: $section-spacing;
+  text-align: center;
+
+  .content-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: $text-primary;
+  }
+
+  p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: $text-secondary;
+  }
+}
+
+// Features Section
+.features-section {
+  @include section-padding;
+  margin-bottom: $section-spacing;
+
+  h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+
+    @media (max-width: 992px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 576px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .feature-card {
+    background: white;
+    padding: 30px;
+    border-radius: $card-radius;
+    text-align: center;
+    @include card-hover;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      color: $text-primary;
+    }
+
+    p {
+      color: $text-secondary;
+      line-height: 1.6;
+    }
+  }
+}
+
+// Timeline Section
+.timeline-section {
+  @include section-padding;
+  margin-bottom: $section-spacing;
+  background-color: #f8f9fa;
+
+  h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+  }
+
+  .timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 100%;
+      background-color: $primary-color;
+
+      @media (max-width: 768px) {
+        left: 30px;
+      }
+    }
+  }
+
+  .timeline-item {
+    margin-bottom: 50px;
+    position: relative;
+    width: 50%;
+    padding-right: 40px;
+
+    &:nth-child(even) {
+      margin-left: 50%;
+      padding-right: 0;
+      padding-left: 40px;
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
+      padding-left: 70px;
+      padding-right: 0;
+
+      &:nth-child(even) {
+        margin-left: 0;
+        padding-left: 70px;
+      }
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      right: -8px;
+      top: 20px;
+      width: 16px;
+      height: 16px;
+      background-color: $primary-color;
+      border-radius: 50%;
+
+      @media (max-width: 768px) {
+        left: 22px;
+        right: auto;
+      }
+    }
+  }
+
+  .timeline-content {
+    background: white;
+    padding: 30px;
+    border-radius: $card-radius;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    @include card-hover;
+
+    .year {
+      display: inline-block;
+      padding: 5px 15px;
+      background-color: $primary-color;
+      color: white;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: $text-primary;
+    }
+
+    p {
+      color: $text-secondary;
+      line-height: 1.6;
+    }
+  }
+}
+
+// Team Section
+.team-section {
+  @include section-padding;
+  margin-bottom: $section-spacing;
+
+  h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+
+    @media (max-width: 992px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 576px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .team-card {
+    background: white;
+    border-radius: $card-radius;
+    overflow: hidden;
+    @include card-hover;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+    .member-image {
+      width: 100%;
+      height: 300px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform $transition-speed ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+
+    .member-info {
+      padding: 25px;
+      text-align: center;
+
+      h3 {
+        font-size: 1.3rem;
+        margin-bottom: 5px;
+        color: $text-primary;
+      }
+
+      .role {
+        color: $primary-color;
+        font-size: 0.9rem;
+        display: block;
+        margin-bottom: 15px;
+      }
+
+      p {
+        color: $text-secondary;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+
+      a {
+        color: $text-secondary;
+        font-size: 1.2rem;
+        transition: color $transition-speed ease;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+}
+
+// Contact Section
+.contact-section {
+  @include section-padding;
+  background-color: #f8f9fa;
+  text-align: center;
+
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+  }
+
+  .contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+
+      i {
+        font-size: 1.5rem;
+        color: $primary-color;
+      }
+
+      p {
+        color: $text-secondary;
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+// Animation classes
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+// Responsive adjustments
+@media (max-width: 1200px) {
+  .section {
+    padding: 60px 0;
+  }
+}
+
+@media (max-width: 992px) {
+  .hero-section {
+    padding: 80px 20px;
+    
+    h1 {
+      font-size: 2.8rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .section-spacing {
+    margin-bottom: 60px;
+  }
+
+  .hero-section {
+    h1 {
+      font-size: 2.2rem;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+    }
+  }
+}
