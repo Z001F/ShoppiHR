@@ -4,13 +4,13 @@
     <div class="justify-content-between">
       <ul class="navbar-nav d-flex flex-row">
         <li class="mx-3">
-          <a class="nav-link" routerLink="/home">Home</a>
+          <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
         </li>
         <li class="mx-3">
-          <a class="nav-link" routerLink="/managment">Management</a>
+          <a class="nav-link" routerLink="/managment" routerLinkActive="active">Management</a>
         </li>
         <li class="mx-3">
-          <a class="nav-link" routerLink="/about">About</a>
+          <a class="nav-link" routerLink="/about" routerLinkActive="active">About</a>
         </li>
         <li class="mx-3" *ngIf="!(authService.isLoggedIn$ | async)">
           <a routerLink="/login" class="btn btn-primary">Login</a>

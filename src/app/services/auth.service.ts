@@ -1,35 +1,48 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { ManagmentServiceService, User } from './management.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // Development credentials - REMOVE IN PRODUCTION!
-  private readonly DEV_USERNAME = 'admin';
-  private readonly DEV_PASSWORD = 'admin';
-
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(private router: Router) {
-    // Check if user was previously logged in
+  private currentUserEmail: string | null = null;
+  private currentUserRole: 'admin' | 'user' = 'user';
+
+  constructor(
+    private router: Router,
+    private managementService: ManagmentServiceService
+  ) {
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
     this.isLoggedInSubject.next(loggedIn);
     
-    // If not logged in, redirect to login page
-    if (!loggedIn) {
+    if (loggedIn) {
+      this.currentUserRole = localStorage.getItem('userRole') as 'admin' | 'user' || 'user';
+      this.currentUserEmail = localStorage.getItem('currentUserEmail');
+    } else {
       this.router.navigate(['/login']);
     }
   }
 
   login(username: string, password: string): boolean {
-    // Development login check - REPLACE WITH REAL AUTH IN PRODUCTION!
-    // Current credentials: username: 'admin', password: 'admin'
-    if (username === this.DEV_USERNAME && password === this.DEV_PASSWORD) {
+    const users = this.managementService.getUsers();
+    const user = users.find(u => 
+      u.email === username && 
+      u.password === password && 
+      !u.deleted
+    );
+
+    if (user) {
       this.isLoggedInSubject.next(true);
+      this.currentUserRole = user.role;
+      this.currentUserEmail = user.email;
       localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('currentUserEmail', user.email);
+      localStorage.setItem('userRole', user.role);
       this.router.navigate(['/home']);
       return true;
     }
@@ -39,6 +52,27 @@ export class AuthService {
   logout() {
     this.isLoggedInSubject.next(false);
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('currentUserEmail');
+    localStorage.removeItem('userRole');
+    this.currentUserEmail = null;
+    this.currentUserRole = 'user';
     this.router.navigate(['/login']);
+  }
+
+  getCurrentUserEmail(): string | null {
+    if (!this.currentUserEmail) {
+      this.currentUserEmail = localStorage.getItem('currentUserEmail');
+    }
+    return this.currentUserEmail;
+  }
+
+  getCurrentUserRole(): 'admin' | 'user' {
+    if (this.currentUserRole === 'user') {
+      const storedRole = localStorage.getItem('userRole');
+      if (storedRole === 'admin') {
+        this.currentUserRole = 'admin';
+      }
+    }
+    return this.currentUserRole;
   }
 } 

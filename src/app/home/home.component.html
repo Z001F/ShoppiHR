@@ -1,1 +1,110 @@
-<p>home works!</p>
+<div class="home-container">
+  <div class="controls-container">
+    <div class="search-container">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="searchProducts()"
+        placeholder="Search products..."
+        class="search-input"
+      />
+    </div>
+    <select 
+      [(ngModel)]="selectedPriceRange"
+      (change)="onPriceRangeChange()"
+      class="price-filter"
+    >
+      <option *ngFor="let range of priceRanges" [value]="range.value">
+        {{ range.label }}
+      </option>
+    </select>
+    <button class="view-toggle-button" (click)="toggleView()">
+      {{ getViewModeLabel() }}
+    </button>
+  </div>
+
+  <!-- Full Table View -->
+  <table class="data-table" *ngIf="currentView === 'full'">
+    <thead>
+      <tr>
+        <th (click)="sortProducts('Pimg')">
+          Image {{ getSortIcon('Pimg') }}
+        </th>
+        <th (click)="sortProducts('description')">
+          Description {{ getSortIcon('description') }}
+        </th>
+        <th (click)="sortProducts('price')">
+          Price {{ getSortIcon('price') }}
+        </th>
+        <th (click)="sortProducts('date')">
+          Date {{ getSortIcon('date') }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of filteredProducts" (click)="showProductDetails(product)" class="product-row">
+        <td class="image-cell">
+          <img [src]="product.Pimg" [alt]="product.description" class="product-image">
+        </td>
+        <td>{{ product.description }}</td>
+        <td>${{ product.price }}</td>
+        <td>{{ product.date }}</td>
+      </tr>
+      <tr *ngIf="filteredProducts.length === 0">
+        <td colspan="4" class="no-results">No products found</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Image & Price View -->
+  <div class="product-grid image-price" *ngIf="currentView === 'image-price'">
+    <div class="product-card" *ngFor="let product of filteredProducts" (click)="showProductDetails(product)">
+      <img [src]="product.Pimg" [alt]="product.description" class="product-image">
+      <div class="product-info">
+        <h3>{{ product.description }}</h3>
+        <p class="price">${{ product.price }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gallery View -->
+  <div class="product-grid gallery" *ngIf="currentView === 'gallery'">
+    <div class="product-card" *ngFor="let product of filteredProducts" (click)="showProductDetails(product)">
+      <img [src]="product.Pimg" [alt]="product.description" class="product-image">
+    </div>
+  </div>
+
+  <!-- Full View (Image, Price, and Date) -->
+  <div class="product-grid full" *ngIf="currentView === 'full'">
+    <div class="product-card" *ngFor="let product of filteredProducts" (click)="showProductDetails(product)">
+      <img [src]="product.Pimg" [alt]="product.description" class="product-image">
+      <div class="product-info">
+        <h3>{{ product.description }}</h3>
+        <p class="price">${{ product.price }}</p>
+        <p class="date">{{ product.date }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results Message -->
+  <div class="no-results" *ngIf="filteredProducts.length === 0">
+    No products found
+  </div>
+
+  <div class="modal" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <span class="close-button" (click)="closeModal()">&times;</span>
+      <div class="product-details" *ngIf="selectedProduct">
+        <div class="product-image-container">
+          <img [src]="selectedProduct.Pimg" [alt]="selectedProduct.description" class="modal-product-image">
+        </div>
+        <div class="product-info">
+          <h2>{{ selectedProduct.description }}</h2>
+          <div class="price-tag">${{ selectedProduct.price }}</div>
+          <div class="date-info">Added on: {{ selectedProduct.date }}</div>
+          <div class="product-id">Product ID: {{ selectedProduct.id }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

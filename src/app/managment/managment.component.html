@@ -1,98 +1,85 @@
 <div class="management-container">
   <div class="button-container">
-    <button
-      (click)="toggleSecondForm()"
-      class="toggle-button"
-    >
+    <button (click)="toggleSecondForm()" class="toggle-button">
       {{ isSecondFormVisible ? "Close" : "AddProduct" }}
     </button>
 
-    <button (click)="toggleForm()" class="toggle-button">
+    <button *ngIf="canAddUser()" (click)="toggleForm()" class="toggle-button">
       {{ isFormVisible ? "Close" : "AddUser" }}
     </button>
   </div>
 
-  <!-- Add User Form -->
+  <!-- Add/Edit User Form -->
   <div *ngIf="isFormVisible" class="mini-form">
     <form (ngSubmit)="submitAddUserForm()">
+      <h3>{{ isEditMode ? 'Edit User' : 'Add New User' }}</h3>
       <div class="form-group">
         <label for="name">Name:</label>
-        <input
-          [(ngModel)]="adduser.name"
-          type="text"
-          id="name"
-          name="name"
-          placeholder="Enter your name"
-        />
+        <input [(ngModel)]="adduser.name" type="text" id="name" name="name" placeholder="Enter your name" />
       </div>
       <div class="form-group">
         <label for="email">Email:</label>
-        <input
-          [(ngModel)]="adduser.email"
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Enter your email"
-        />
+        <input [(ngModel)]="adduser.email" type="email" id="email" name="email" placeholder="Enter your email" />
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
-        <input
-          [(ngModel)]="adduser.password"
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Enter your password"
-        />
+        <input [(ngModel)]="adduser.password" type="password" id="password" name="password" placeholder="Enter your password" />
       </div>
-      <button type="submit" class="submit-button">Submit</button>
+      <div class="form-group" *ngIf="isAdmin && (!isEditMode || currentUser?.id !== adduser.id)">
+        <label for="role">Role:</label>
+        <select [(ngModel)]="adduser.role" id="role" name="role" class="form-control">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <button type="submit" class="submit-button">
+        {{ isEditMode ? 'Update' : 'Submit' }}
+      </button>
+      <button type="button" class="cancel-button" (click)="toggleForm()">
+        Cancel
+      </button>
     </form>
   </div>
 
-  <!-- Add Product Form -->
+  <!-- Add/Edit Product Form -->
   <div *ngIf="isSecondFormVisible" class="mini-form">
     <form (ngSubmit)="submitAddProductForm()">
+      <h3>{{ isProductEditMode ? 'Edit Product' : 'Add New Product' }}</h3>
       <div class="form-group">
-        <label for="Pimg">Image:</label>
-        <input
-          [(ngModel)]="addproduct.Pimg"
-          type="file"
-          id="Pimg"
-          name="Pimg"
-          placeholder="Upload image"
+        <label for="Pimg">Image URL:</label>
+        <input 
+          [(ngModel)]="addproduct.Pimg" 
+          type="url" 
+          id="Pimg" 
+          name="Pimg" 
+          placeholder="Enter image URL" 
         />
+        <!-- Preview image if URL is provided -->
+        <img 
+          *ngIf="addproduct.Pimg" 
+          [src]="addproduct.Pimg" 
+          [alt]="addproduct.description" 
+          class="image-preview"
+        >
       </div>
       <div class="form-group">
         <label for="description">Description:</label>
-        <input
-          [(ngModel)]="addproduct.description"
-          type="text"
-          id="description"
-          name="description"
-          placeholder="Enter description"
-        />
+        <input [(ngModel)]="addproduct.description" type="text" id="description" name="description" placeholder="Enter description" />
       </div>
       <div class="form-group">
         <label for="price">Price:</label>
-        <input
-          [(ngModel)]="addproduct.price"
-          type="number"
-          id="price"
-          name="price"
-          placeholder="Enter price"
-        />
+        <input [(ngModel)]="addproduct.price" type="number" id="price" name="price" placeholder="Enter price" />
       </div>
       <div class="form-group">
         <label for="date">Date:</label>
-        <input
-          [(ngModel)]="addproduct.date"
-          type="date"
-          id="date"
-          name="date"
-          placeholder="Enter the date"
-        />
+        <input [(ngModel)]="addproduct.date" type="date" id="date" name="date" placeholder="Enter the date" />
       </div>
-      <button type="submit" class="submit-button">Submit</button>
+      <button type="submit" class="submit-button">
+        {{ isProductEditMode ? 'Update' : 'Submit' }}
+      </button>
+      <button type="button" class="cancel-button" (click)="toggleSecondForm()">
+        Cancel
+      </button>
     </form>
   </div>
 
@@ -104,15 +91,35 @@
         <th>Description</th>
         <th>Price</th>
         <th>Date</th>
+        <th>Added By</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of products; let i = index">
-        <td>{{ product.Pimg }}</td>
+      <tr *ngFor="let product of products">
+        <td class="image-cell">
+          <img [src]="product.Pimg" [alt]="product.description" class="product-image">
+        </td>
         <td>{{ product.description }}</td>
-        <td>{{ product.price }}</td>
+        <td>${{ product.price }}</td>
         <td>{{ product.date }}</td>
+        <td>{{ getUserName(product.userId) }}</td>
+        <td>
+          <button 
+            *ngIf="canModifyProduct(product)"
+            class="action-button" 
+            (click)="modifyProduct(product)"
+          >
+            Modify
+          </button>
+          <button 
+            *ngIf="canDeleteProduct(product)"
+            class="action-button" 
+            (click)="deleteProduct(product)"
+          >
+            Delete
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -124,17 +131,39 @@
         <th>Name</th>
         <th>Email</th>
         <th>Password</th>
+        <th>Role</th>
+        <th>Registry Date</th>
+        <th>Status</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let user of users; let i = index">
+      <tr *ngFor="let user of displayedUsers" [ngClass]="{'admin-row': user.role === 'admin'}">
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.password }}</td>
         <td>
-          <button class="action-button">Modify</button>
-          <button class="action-button">Delete</button>
+          <span [ngClass]="{'admin-role': user.role === 'admin', 'user-role': user.role === 'user'}">
+            {{ user.role }}
+          </span>
+        </td>
+        <td>{{ user.registryDate }}</td>
+        <td>{{ user.deleted ? 'Deleted' : 'Active' }}</td>
+        <td>
+          <button 
+            *ngIf="canModifyUser(user) && !user.deleted"
+            class="action-button" 
+            (click)="modifyUser(user)"
+          >
+            Modify
+          </button>
+          <button 
+            *ngIf="canDeleteUser(user) && !user.deleted"
+            class="action-button" 
+            (click)="deleteUser(user)"
+          >
+            Delete
+          </button>
         </td>
       </tr>
     </tbody>
