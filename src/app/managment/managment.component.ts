@@ -29,13 +29,45 @@ export class ManagmentComponent implements OnInit {
     id: 0,
     Pimg: '',
     description: '',
-    price: '',
+    price: 0,
     date: '',
-    userId: 0
+    userId: 0,
+    category: '',
+    brand: ''
   };
 
   users: User[] = [];
   products: Product[] = [];
+
+  // Add categories and brands
+  categories: string[] = [
+    'Laptops',
+    'Smartphones',
+    'Tablets',
+    'Headphones',
+    'Smartwatches',
+    'Cameras',
+    'Gaming',
+    'Accessories'
+  ];
+
+  brands: string[] = [
+    'Apple',
+    'Samsung',
+    'Sony',
+    'Dell',
+    'HP',
+    'Lenovo',
+    'Microsoft',
+    'Google',
+    'LG',
+    'Asus'
+  ];
+
+  newCategory: string = '';
+  newBrand: string = '';
+  isAddingCategory: boolean = false;
+  isAddingBrand: boolean = false;
 
   constructor(
     private managementService: ManagmentServiceService,
@@ -136,9 +168,11 @@ export class ManagmentComponent implements OnInit {
         id: 0,
         Pimg: '',
         description: '',
-        price: '',
+        price: 0,
         date: '',
-        userId: 0
+        userId: 0,
+        category: '',
+        brand: ''
       };
     }
     
@@ -179,33 +213,53 @@ export class ManagmentComponent implements OnInit {
     this.loadData();
   }
 
-  // Handle product form submission (both add and modify)
+  // Add form validation
+  validateProductForm(): boolean {
+    if (!this.addproduct.Pimg || 
+        !this.addproduct.description || 
+        !this.addproduct.price || 
+        !this.addproduct.date || 
+        !this.addproduct.category || 
+        !this.addproduct.brand) {
+      alert('Please fill in all fields');
+      return false;
+    }
+    return true;
+  }
+
+  // Update submit method with validation
   submitAddProductForm() {
-    if (!this.currentUser) return;
+    if (!this.currentUser || !this.validateProductForm()) return;
+    
+    // Convert price to number
+    this.addproduct.price = parseFloat(this.addproduct.price.toString());
     
     if (this.isProductEditMode) {
-      // Update existing product
-      this.addproduct.userId = this.currentUser.id;
       this.managementService.updateProduct(this.addproduct);
     } else {
-      // Add new product
       this.addproduct.id = this.products.length + 1;
       this.addproduct.userId = this.currentUser.id;
       this.managementService.addProduct(this.addproduct);
     }
 
-    // Reset form and state
+    // Reset form
+    this.resetProductForm();
+  }
+
+  // Add method to reset form
+  private resetProductForm() {
     this.addproduct = {
       id: 0,
       Pimg: '',
       description: '',
-      price: '',
+      price: 0,
       date: '',
-      userId: 0
+      userId: 0,
+      category: '',
+      brand: ''
     };
     this.isProductEditMode = false;
     this.isSecondFormVisible = false;
-    this.loadData();
   }
 
   // Handle user modification
@@ -238,5 +292,36 @@ export class ManagmentComponent implements OnInit {
   getUserName(userId: number): string {
     const user = this.users.find(u => u.id === userId);
     return user ? user.name : 'Unknown User';
+  }
+
+  // Add new category
+  addNewCategory() {
+    if (this.newCategory.trim()) {
+      this.categories.push(this.newCategory.trim());
+      this.addproduct.category = this.newCategory.trim();
+      this.newCategory = '';
+      this.isAddingCategory = false;
+    }
+  }
+
+  // Add new brand
+  addNewBrand() {
+    if (this.newBrand.trim()) {
+      this.brands.push(this.newBrand.trim());
+      this.addproduct.brand = this.newBrand.trim();
+      this.newBrand = '';
+      this.isAddingBrand = false;
+    }
+  }
+
+  // Cancel adding new category/brand
+  cancelAdd(type: 'category' | 'brand') {
+    if (type === 'category') {
+      this.isAddingCategory = false;
+      this.newCategory = '';
+    } else {
+      this.isAddingBrand = false;
+      this.newBrand = '';
+    }
   }
 }

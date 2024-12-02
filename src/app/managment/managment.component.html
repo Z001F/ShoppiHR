@@ -74,6 +74,84 @@
         <label for="date">Date:</label>
         <input [(ngModel)]="addproduct.date" type="date" id="date" name="date" placeholder="Enter the date" />
       </div>
+      <div class="form-group">
+        <label for="category">Category:</label>
+        <div class="select-or-add">
+          <select 
+            *ngIf="!isAddingCategory"
+            [(ngModel)]="addproduct.category" 
+            id="category" 
+            name="category" 
+            class="form-control"
+          >
+            <option value="">Select Category</option>
+            <option *ngFor="let category of categories" [value]="category">
+              {{ category }}
+            </option>
+          </select>
+          <div *ngIf="isAddingCategory" class="add-new-input">
+            <input 
+              [(ngModel)]="newCategory"
+              type="text"
+              name="newCategory"
+              placeholder="Enter new category"
+              class="form-control"
+            />
+            <div class="add-new-actions">
+              <button type="button" class="btn-add" (click)="addNewCategory()">Add</button>
+              <button type="button" class="btn-cancel" (click)="cancelAdd('category')">Cancel</button>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            class="btn-new" 
+            *ngIf="!isAddingCategory"
+            (click)="isAddingCategory = true"
+          >
+            + New Category
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="brand">Brand:</label>
+        <div class="select-or-add">
+          <select 
+            *ngIf="!isAddingBrand"
+            [(ngModel)]="addproduct.brand" 
+            id="brand" 
+            name="brand" 
+            class="form-control"
+          >
+            <option value="">Select Brand</option>
+            <option *ngFor="let brand of brands" [value]="brand">
+              {{ brand }}
+            </option>
+          </select>
+          <div *ngIf="isAddingBrand" class="add-new-input">
+            <input 
+              [(ngModel)]="newBrand"
+              type="text"
+              name="newBrand"
+              placeholder="Enter new brand"
+              class="form-control"
+            />
+            <div class="add-new-actions">
+              <button type="button" class="btn-add" (click)="addNewBrand()">Add</button>
+              <button type="button" class="btn-cancel" (click)="cancelAdd('brand')">Cancel</button>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            class="btn-new" 
+            *ngIf="!isAddingBrand"
+            (click)="isAddingBrand = true"
+          >
+            + New Brand
+          </button>
+        </div>
+      </div>
+
       <button type="submit" class="submit-button">
         {{ isProductEditMode ? 'Update' : 'Submit' }}
       </button>
@@ -89,6 +167,8 @@
       <tr>
         <th>Image</th>
         <th>Description</th>
+        <th>Category</th>
+        <th>Brand</th>
         <th>Price</th>
         <th>Date</th>
         <th>Added By</th>
@@ -101,6 +181,8 @@
           <img [src]="product.Pimg" [alt]="product.description" class="product-image">
         </td>
         <td>{{ product.description }}</td>
+        <td>{{ product.category }}</td>
+        <td>{{ product.brand }}</td>
         <td>${{ product.price }}</td>
         <td>{{ product.date }}</td>
         <td>{{ getUserName(product.userId) }}</td>

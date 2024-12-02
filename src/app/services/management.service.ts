@@ -15,9 +15,11 @@ export interface Product {
   id: number;
   Pimg: string;
   description: string;
-  price: string;
+  price: number;
   date: string;
   userId: number;
+  category: string;
+  brand: string;
 }
 
 @Injectable({
@@ -50,33 +52,41 @@ export class ManagmentServiceService {
       id: 1,
       Pimg: 'https://m.media-amazon.com/images/I/71TPda7cwUL._AC_SL1500_.jpg',
       description: 'MacBook Pro 2023',
-      price: '1299.99',
+      price: 1299.99,
       date: '2024-03-15',
-      userId: 1
+      userId: 1,
+      category: 'Laptops',
+      brand: 'Apple'
     },
     {
       id: 2,
       Pimg: 'https://m.media-amazon.com/images/I/61bK6PMOC3L._AC_SL1500_.jpg',
       description: 'iPhone 14 Pro',
-      price: '999.99',
+      price: 999.99,
       date: '2024-03-14',
-      userId: 2
+      userId: 2,
+      category: 'Smartphones',
+      brand: 'Apple'
     },
     {
       id: 3,
       Pimg: 'https://m.media-amazon.com/images/I/61kC3UxQPDL._AC_SL1500_.jpg',
       description: 'Sony WH-1000XM4',
-      price: '349.99',
+      price: 349.99,
       date: '2024-03-13',
-      userId: 1
+      userId: 1,
+      category: 'Headphones',
+      brand: 'Sony'
     },
     {
       id: 4,
       Pimg: 'https://m.media-amazon.com/images/I/81gC7frRJyL._AC_SL1500_.jpg',
       description: 'iPad Pro 2023',
-      price: '799.99',
+      price: 799.99,
       date: '2024-03-12',
-      userId: 2
+      userId: 2,
+      category: 'Tablets',
+      brand: 'Apple'
     }
   ];
 
@@ -145,6 +155,32 @@ export class ManagmentServiceService {
     this.productsSubject.next(this.products);
     // Update localStorage
     localStorage.setItem('managementProducts', JSON.stringify(this.products));
+  }
+
+  // Add method to sync categories and brands across components
+  private categoriesSubject = new BehaviorSubject<string[]>([]);
+  private brandsSubject = new BehaviorSubject<string[]>([]);
+
+  getCategories() {
+    return this.categoriesSubject.asObservable();
+  }
+
+  getBrands() {
+    return this.brandsSubject.asObservable();
+  }
+
+  addCategory(category: string) {
+    const currentCategories = this.categoriesSubject.value;
+    if (!currentCategories.includes(category)) {
+      this.categoriesSubject.next([...currentCategories, category]);
+    }
+  }
+
+  addBrand(brand: string) {
+    const currentBrands = this.brandsSubject.value;
+    if (!currentBrands.includes(brand)) {
+      this.brandsSubject.next([...currentBrands, brand]);
+    }
   }
 
   constructor() {

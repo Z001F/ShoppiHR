@@ -235,3 +235,66 @@ h3 {
   color: #495057;
   font-weight: normal;
 }
+
+.select-or-add {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+
+  .form-control {
+    flex: 1;
+  }
+
+  .btn-new {
+    padding: 8px 12px;
+    background-color: transparent;
+    color: $primary-color;
+    border: 1px dashed $primary-color;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: rgba($primary-color, 0.1);
+    }
+  }
+}
+
+.add-new-input {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .add-new-actions {
+    display: flex;
+    gap: 8px;
+
+    button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &.btn-add {
+        background-color: $success-color;
+        color: white;
+
+        &:hover {
+          background-color: darken($success-color, 5%);
+        }
+      }
+
+      &.btn-cancel {
+        background-color: $danger-color;
+        color: white;
+
+        &:hover {
+          background-color: darken($danger-color, 5%);
+        }
+      }
+    }
+  }
+}

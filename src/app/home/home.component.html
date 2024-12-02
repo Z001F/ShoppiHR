@@ -12,10 +12,28 @@
     <select 
       [(ngModel)]="selectedPriceRange"
       (change)="onPriceRangeChange()"
-      class="price-filter"
+      class="filter-select"
     >
       <option *ngFor="let range of priceRanges" [value]="range.value">
         {{ range.label }}
+      </option>
+    </select>
+    <select 
+      [(ngModel)]="selectedCategory"
+      (change)="onCategoryChange()"
+      class="filter-select"
+    >
+      <option *ngFor="let category of categories" [value]="category.value">
+        {{ category.label }}
+      </option>
+    </select>
+    <select 
+      [(ngModel)]="selectedBrand"
+      (change)="onBrandChange()"
+      class="filter-select"
+    >
+      <option *ngFor="let brand of brands" [value]="brand.value">
+        {{ brand.label }}
       </option>
     </select>
     <button class="view-toggle-button" (click)="toggleView()">
@@ -23,7 +41,7 @@
     </button>
   </div>
 
-  <!-- Full Table View -->
+  <!-- Table View -->
   <table class="data-table" *ngIf="currentView === 'full'">
     <thead>
       <tr>
@@ -74,19 +92,7 @@
     </div>
   </div>
 
-  <!-- Full View (Image, Price, and Date) -->
-  <div class="product-grid full" *ngIf="currentView === 'full'">
-    <div class="product-card" *ngFor="let product of filteredProducts" (click)="showProductDetails(product)">
-      <img [src]="product.Pimg" [alt]="product.description" class="product-image">
-      <div class="product-info">
-        <h3>{{ product.description }}</h3>
-        <p class="price">${{ product.price }}</p>
-        <p class="date">{{ product.date }}</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- No Results Message -->
+  <!-- No Results Message (outside of any view) -->
   <div class="no-results" *ngIf="filteredProducts.length === 0">
     No products found
   </div>
@@ -100,6 +106,10 @@
         </div>
         <div class="product-info">
           <h2>{{ selectedProduct.description }}</h2>
+          <div class="brand-category">
+            <span class="brand">{{ selectedProduct.brand }}</span>
+            <span class="category">{{ selectedProduct.category }}</span>
+          </div>
           <div class="price-tag">${{ selectedProduct.price }}</div>
           <div class="date-info">Added on: {{ selectedProduct.date }}</div>
           <div class="product-id">Product ID: {{ selectedProduct.id }}</div>

@@ -19,6 +19,8 @@ export class HomeComponent implements OnInit {
   showModal: boolean = false;
   currentView: ViewMode = 'full';
   selectedPriceRange: PriceRange = 'all';
+  selectedCategory: string = 'all';
+  selectedBrand: string = 'all';
 
   // Add price range options
   priceRanges = [
@@ -28,7 +30,47 @@ export class HomeComponent implements OnInit {
     { value: 'over1000', label: 'Over $1000' }
   ];
 
-  constructor(private managementService: ManagmentServiceService) {}
+  // Add categories and brands arrays
+  categories = [
+    { value: 'all', label: 'All Categories' },
+    { value: 'Laptops', label: 'Laptops' },
+    { value: 'Smartphones', label: 'Smartphones' },
+    { value: 'Tablets', label: 'Tablets' },
+    { value: 'Headphones', label: 'Headphones' },
+    { value: 'Smartwatches', label: 'Smartwatches' },
+    { value: 'Cameras', label: 'Cameras' },
+    { value: 'Gaming', label: 'Gaming' },
+    { value: 'Accessories', label: 'Accessories' }
+  ];
+
+  brands = [
+    { value: 'all', label: 'All Brands' },
+    { value: 'Apple', label: 'Apple' },
+    { value: 'Samsung', label: 'Samsung' },
+    { value: 'Sony', label: 'Sony' },
+    { value: 'Dell', label: 'Dell' },
+    { value: 'HP', label: 'HP' },
+    { value: 'Lenovo', label: 'Lenovo' },
+    { value: 'Microsoft', label: 'Microsoft' },
+    { value: 'Google', label: 'Google' }
+  ];
+
+  constructor(private managementService: ManagmentServiceService) {
+    // Subscribe to categories and brands updates
+    this.managementService.getCategories().subscribe(categories => {
+      this.categories = [
+        { value: 'all', label: 'All Categories' },
+        ...categories.map(c => ({ value: c, label: c }))
+      ];
+    });
+
+    this.managementService.getBrands().subscribe(brands => {
+      this.brands = [
+        { value: 'all', label: 'All Brands' },
+        ...brands.map(b => ({ value: b, label: b }))
+      ];
+    });
+  }
 
   ngOnInit() {
     this.loadProducts();
@@ -72,14 +114,15 @@ export class HomeComponent implements OnInit {
   // Apply all filters and sorting
   private applyFilters() {
     this.filteredProducts = [...this.products]
-      // Apply search filter
-      .filter(product => 
-        product.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        product.price.toString().includes(this.searchTerm)
-      )
-      // Apply price filter
       .filter(product => {
-        const price = parseFloat(product.price);
+        const searchLower = this.searchTerm.toLowerCase();
+        return product.description.toLowerCase().includes(searchLower) ||
+               product.brand.toLowerCase().includes(searchLower) ||
+               product.category.toLowerCase().includes(searchLower) ||
+               product.price.toString().includes(this.searchTerm);
+      })
+      .filter(product => {
+        const price = product.price;
         switch (this.selectedPriceRange) {
           case 'under500':
             return price < 500;
@@ -91,6 +134,14 @@ export class HomeComponent implements OnInit {
             return true;
         }
       })
+      // Apply category filter
+      .filter(product => 
+        this.selectedCategory === 'all' ? true : product.category === this.selectedCategory
+      )
+      // Apply brand filter
+      .filter(product => 
+        this.selectedBrand === 'all' ? true : product.brand === this.selectedBrand
+      )
       // Apply sorting
       .sort((a, b) => {
         const aValue = a[this.sortField];
@@ -146,5 +197,22 @@ export class HomeComponent implements OnInit {
   // Add method to handle price range change
   onPriceRangeChange() {
     this.applyFilters();
+  }
+
+  // Add methods to handle category and brand changes
+  onCategoryChange() {
+    this.applyFilters();
+  }
+
+  onBrandChange() {
+    this.applyFilters();
+  }
+
+  // Add method to format price
+  formatPrice(price: number): string {
+    return price.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    });
   }
 }
